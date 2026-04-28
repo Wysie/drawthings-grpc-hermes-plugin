@@ -1,0 +1,39 @@
+import importlib.util
+import pathlib
+import sys
+
+
+def load_plugin_client():
+    root = pathlib.Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location(
+        "drawthings_grpc_plugin",
+        root / "__init__.py",
+        submodule_search_locations=[str(root)],
+    )
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module.client if hasattr(module, "client") else __import__("drawthings_grpc_plugin.client", fromlist=["*"])
+
+
+def test_alias_resolution_and_defaults():
+    client = load_plugin_client()
+    models = [
+        {"name": "Qwen Image 2512", "file": "qwen_image_2512_q8p.ckpt", "version": "qwen_image"},
+        {"name": "ERNIE Image Base 1.0", "file": "ernie_image_q8p.ckpt", "version": "ernie_image"},
+    ]
+    loras = [
+        {
+            "name": "Qwen Image 2512 Lightning 4-Step v1.0",
+            "file": "qwen_image_2512_lightning_4_step_v1.0_lora_f16.ckpt",
+            "version": "qwen_image",
+        }
+    ]
+
+    assert client.resolve(models, "qwen-image-2512")["file"] == "qwen_image_2512_q8p.ckpt"
+    assert client.resolve(models, "ernie-image")["file"] == "ernie_image_q8p.ckpt"
+    assert client.resolve(loras, "qwen-lightning")["file"] == "qwen_image_2512_lightning_4_step_v1.0_lora_f16.ckpt"
+
+    assert client.generation_defaults(models[0])["steps"] == 35
+    assert client.generation_defaults(models[1])["steps"] == 50
+    assert client.generation_defaults(models[0], loras[0])["steps"] == 4

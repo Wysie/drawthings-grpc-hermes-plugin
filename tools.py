@@ -1,0 +1,40 @@
+from __future__ import annotations
+
+import json
+import traceback
+
+try:
+    from . import client
+except ImportError:  # Allows pytest/direct import from plugin root.
+    import client  # type: ignore
+
+
+def _json(obj) -> str:
+    return json.dumps(obj, ensure_ascii=False, indent=2)
+
+
+def drawthings_list(args=None, **kwargs) -> str:
+    args = args or {}
+    try:
+        kind = args.get("kind", "all")
+        # schema uses controlnets; accept common variants
+        if kind in {"controlNets", "control_nets", "controls"}:
+            kind = "controlnets"
+        data = client.list_inventory(kind=kind, query=args.get("query"))
+        return _json({"ok": True, "endpoint": _endpoint_info(), **data})
+    except Exception as e:
+        return _json({"ok": False, "error": str(e), "traceback": traceback.format_exc(limit=3)})
+
+
+def drawthings_generate(args=None, **kwargs) -> str:
+    args = args or {}
+    try:
+        result = client.generate_image(args)
+        return _json(result)
+    except Exception as e:
+        return _json({"ok": False, "error": str(e), "traceback": traceback.format_exc(limit=3)})
+
+
+def _endpoint_info():
+    host, port, tls = client._endpoint()
+    return {"host": host, "port": port, "tls": tls}

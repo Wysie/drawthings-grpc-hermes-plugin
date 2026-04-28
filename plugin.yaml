@@ -1,0 +1,14 @@
+name: drawthings-grpc
+version: "0.2.0"
+description: "Local Draw Things image generation via the Draw Things gRPC server: list models/LoRAs/ControlNets and generate images without changing the default cloud image provider."
+author: Agent Hammy
+requires_env: []
+optional_env:
+  - DRAWTHINGS_GRPC_HOST
+  - DRAWTHINGS_GRPC_PORT
+  - DRAWTHINGS_GRPC_TLS
+  - DRAWTHINGS_OUTPUT_DIR
+provides_tools:
+  - drawthings_list
+  - drawthings_generate
+provides_hooks: []

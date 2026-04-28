@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drawthings-grpc-hermes-plugin"
+version = "0.2.0"
+description = "Hermes Agent plugin for local Draw Things image generation via gRPC"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Yuan Chin"}]
+dependencies = [
+  "grpcio",
+  "flatbuffers",
+  "fpzip",
+  "numpy",
+  "Pillow",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

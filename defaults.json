@@ -1,0 +1,118 @@
+{
+  "description": "Built-in defaults and aliases for Draw Things gRPC plugin. User overrides live in ~/.hermes/drawthings-grpc/config.json.",
+  "version_defaults": {
+    "z_image": {
+      "steps": 8,
+      "sampler": "Euler A Trailing",
+      "cfg": 1.0,
+      "shift": 1.0,
+      "guidance_embed": 3.5,
+      "resolution_dependent_shift": true
+    },
+    "qwen_image": {
+      "steps": 35,
+      "sampler": "Euler A Trailing",
+      "cfg": 1.0,
+      "shift": 1.0,
+      "guidance_embed": 3.5,
+      "resolution_dependent_shift": true
+    },
+    "ernie_image": {
+      "steps": 50,
+      "sampler": "Euler A Trailing",
+      "cfg": 1.0,
+      "shift": 1.0,
+      "guidance_embed": 3.5,
+      "resolution_dependent_shift": true
+    },
+    "flux1": {
+      "steps": 4,
+      "sampler": "Euler A Trailing",
+      "cfg": 1.0,
+      "shift": 1.0,
+      "guidance_embed": 3.5,
+      "resolution_dependent_shift": true
+    },
+    "flux2_4b": {
+      "steps": 20,
+      "sampler": "Euler A Trailing",
+      "cfg": 1.0,
+      "shift": 1.0,
+      "guidance_embed": 3.5,
+      "resolution_dependent_shift": true
+    },
+    "sdxl_base_v0.9": {
+      "steps": 25,
+      "sampler": "DPM++ 2M Karras",
+      "cfg": 7.0,
+      "shift": 1.0,
+      "guidance_embed": 3.5,
+      "resolution_dependent_shift": false
+    }
+  },
+  "model_defaults": {
+    "z_image_turbo_1.0_q8p.ckpt": {
+      "steps": 8,
+      "sampler": "Euler A Trailing"
+    },
+    "qwen_image_2512_q8p.ckpt": {
+      "steps": 35,
+      "sampler": "Euler A Trailing"
+    },
+    "ernie_image_q8p.ckpt": {
+      "steps": 50,
+      "sampler": "Euler A Trailing"
+    },
+    "flux_1_schnell_q8p.ckpt": {
+      "steps": 4,
+      "sampler": "Euler A Trailing"
+    },
+    "realvisxl_v4.0_f16.ckpt": {
+      "steps": 25,
+      "sampler": "DPM++ 2M Karras",
+      "cfg": 7.0
+    },
+    "realvisxl_v4.0_q6p_q8p.ckpt": {
+      "steps": 25,
+      "sampler": "DPM++ 2M Karras",
+      "cfg": 7.0
+    },
+    "juggernaut_xl_v9_f16.ckpt": {
+      "steps": 25,
+      "sampler": "DPM++ 2M Karras",
+      "cfg": 7.0
+    }
+  },
+  "lora_defaults": {
+    "qwen_image_2512_lightning_4_step_v1.0_lora_f16.ckpt": {
+      "steps": 4,
+      "sampler": "Euler A Trailing",
+      "lora_weight": 1.0
+    },
+    "qwen_image_2512_turbo_4_step_v1.0_lora_f16.ckpt": {
+      "steps": 4,
+      "sampler": "Euler A Trailing",
+      "lora_weight": 1.0
+    }
+  },
+  "aliases": {
+    "ernie-image": "ernie_image_q8p.ckpt",
+    "ernie-image-base": "ernie_image_q8p.ckpt",
+    "qwen-image-2512": "qwen_image_2512_q8p.ckpt",
+    "qwen2512": "qwen_image_2512_q8p.ckpt",
+    "qwen-image": "qwen_image_2512_q8p.ckpt",
+    "z-image-turbo": "z_image_turbo_1.0_q8p.ckpt",
+    "zturbo": "z_image_turbo_1.0_q8p.ckpt",
+    "flux2-klein": "flux_2_klein_4b_q8p.ckpt",
+    "flux2-4b": "flux_2_klein_4b_q8p.ckpt",
+    "flux-schnell": "flux_1_schnell_q8p.ckpt",
+    "realvisxl": "realvisxl_v4.0_f16.ckpt",
+    "realvisxl-8bit": "realvisxl_v4.0_q6p_q8p.ckpt",
+    "juggernaut-xl": "juggernaut_xl_v9_f16.ckpt",
+    "qwen-lightning": "qwen_image_2512_lightning_4_step_v1.0_lora_f16.ckpt",
+    "qwen-image-lightning": "qwen_image_2512_lightning_4_step_v1.0_lora_f16.ckpt",
+    "lightning-4step": "qwen_image_2512_lightning_4_step_v1.0_lora_f16.ckpt",
+    "qwen-turbo-lora": "qwen_image_2512_turbo_4_step_v1.0_lora_f16.ckpt",
+    "turbo-4step": "qwen_image_2512_turbo_4_step_v1.0_lora_f16.ckpt"
+  }
+}
