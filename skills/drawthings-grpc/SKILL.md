@@ -51,10 +51,11 @@ Defaults are layered:
 
 Bundled defaults include:
 
-- Z Image Turbo: 8 steps, Euler A Trailing
-- Qwen Image 2512: 35 steps, Euler A Trailing
-- ERNIE Image: 50 steps, Euler A Trailing
-- Qwen Image 2512 Lightning/Turbo LoRA: 4 steps
+- Z Image Turbo: 8 steps, Euler A Trailing, CFG 1.0
+- Qwen Image 2512: 50 steps, Euler A Trailing, CFG 4.0
+- ERNIE Image Base: 50 steps, Euler A Trailing, CFG 4.0
+- ERNIE Image Turbo: 8 steps, Euler A Trailing, CFG 1.0
+- Qwen Image 2512 Lightning/Turbo LoRA: 4 steps, Euler A Trailing, CFG 1.0
 - SDXL models: 25 steps, DPM++ 2M Karras, CFG 7.0
 
 Outputs save to `~/Pictures/Draw Things` unless `output_path` or `DRAWTHINGS_OUTPUT_DIR` is set.

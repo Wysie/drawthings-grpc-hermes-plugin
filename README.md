@@ -261,6 +261,7 @@ Generate with ERNIE:
 The plugin accepts exact Draw Things filenames, exact display names, generated slugs, and configured aliases. Examples:
 
 - `ernie-image`, `ernie-image-base` → `ernie_image_q8p.ckpt`
+- `ernie-image-turbo`, `ernie-turbo` → `ernie_image_turbo_q8p.ckpt`
 - `qwen-image-2512`, `qwen2512`, `qwen-image` → `qwen_image_2512_q8p.ckpt`
 - `z-image-turbo`, `zturbo` → `z_image_turbo_1.0_q8p.ckpt`
 - `realvisxl`, `realvisxl-v4` → RealVisXL
@@ -293,11 +294,12 @@ User overrides live in:
 Current bundled examples:
 
 - `z_image` / Z Image Turbo: 8 steps, Euler A Trailing, CFG 1.0
-- `qwen_image`: 35 steps, Euler A Trailing, CFG 1.0
-- `ernie_image`: 50 steps, Euler A Trailing, CFG 1.0
+- `qwen_image` / Qwen Image 2512: 50 steps, Euler A Trailing, CFG 4.0
+- `ernie_image_q8p.ckpt` / ERNIE Image Base: 50 steps, Euler A Trailing, CFG 4.0
+- `ernie_image_turbo_q8p.ckpt` / ERNIE Image Turbo: 8 steps, Euler A Trailing, CFG 1.0
 - `flux1`: 4 steps, Euler A Trailing, CFG 1.0
 - `sdxl_base_v0.9`: 25 steps, DPM++ 2M Karras, CFG 7.0
-- Qwen Lightning/Turbo LoRAs: 4 steps, LoRA weight 1.0
+- Qwen Lightning/Turbo LoRAs: 4 steps, Euler A Trailing, CFG 1.0, LoRA weight 1.0
 
 ## Adding your own models or LoRAs
 

@@ -11,9 +11,9 @@
       "resolution_dependent_shift": true
     },
     "qwen_image": {
-      "steps": 35,
+      "steps": 50,
       "sampler": "Euler A Trailing",
-      "cfg": 1.0,
+      "cfg": 4.0,
       "shift": 1.0,
       "guidance_embed": 3.5,
       "resolution_dependent_shift": true
@@ -21,7 +21,7 @@
     "ernie_image": {
       "steps": 50,
       "sampler": "Euler A Trailing",
-      "cfg": 1.0,
+      "cfg": 4.0,
       "shift": 1.0,
       "guidance_embed": 3.5,
       "resolution_dependent_shift": true
@@ -57,12 +57,19 @@
       "sampler": "Euler A Trailing"
     },
     "qwen_image_2512_q8p.ckpt": {
-      "steps": 35,
-      "sampler": "Euler A Trailing"
+      "steps": 50,
+      "sampler": "Euler A Trailing",
+      "cfg": 4.0
     },
     "ernie_image_q8p.ckpt": {
       "steps": 50,
-      "sampler": "Euler A Trailing"
+      "sampler": "Euler A Trailing",
+      "cfg": 4.0
+    },
+    "ernie_image_turbo_q8p.ckpt": {
+      "steps": 8,
+      "sampler": "Euler A Trailing",
+      "cfg": 1.0
     },
     "flux_1_schnell_q8p.ckpt": {
       "steps": 4,
@@ -88,17 +95,21 @@
     "qwen_image_2512_lightning_4_step_v1.0_lora_f16.ckpt": {
       "steps": 4,
       "sampler": "Euler A Trailing",
+      "cfg": 1.0,
       "lora_weight": 1.0
     },
     "qwen_image_2512_turbo_4_step_v1.0_lora_f16.ckpt": {
       "steps": 4,
       "sampler": "Euler A Trailing",
+      "cfg": 1.0,
       "lora_weight": 1.0
     }
   },
   "aliases": {
     "ernie-image": "ernie_image_q8p.ckpt",
     "ernie-image-base": "ernie_image_q8p.ckpt",
+    "ernie-image-turbo": "ernie_image_turbo_q8p.ckpt",
+    "ernie-turbo": "ernie_image_turbo_q8p.ckpt",
     "qwen-image-2512": "qwen_image_2512_q8p.ckpt",
     "qwen2512": "qwen_image_2512_q8p.ckpt",
     "qwen-image": "qwen_image_2512_q8p.ckpt",

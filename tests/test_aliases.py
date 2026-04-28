@@ -21,20 +21,35 @@ def test_alias_resolution_and_defaults():
     models = [
         {"name": "Qwen Image 2512", "file": "qwen_image_2512_q8p.ckpt", "version": "qwen_image"},
         {"name": "ERNIE Image Base 1.0", "file": "ernie_image_q8p.ckpt", "version": "ernie_image"},
+        {"name": "ERNIE Image Turbo 1.0", "file": "ernie_image_turbo_q8p.ckpt", "version": "ernie_image"},
     ]
     loras = [
         {
             "name": "Qwen Image 2512 Lightning 4-Step v1.0",
             "file": "qwen_image_2512_lightning_4_step_v1.0_lora_f16.ckpt",
             "version": "qwen_image",
-        }
+        },
+        {
+            "name": "Qwen Image 2512 Turbo 4-Step v1.0",
+            "file": "qwen_image_2512_turbo_4_step_v1.0_lora_f16.ckpt",
+            "version": "qwen_image",
+        },
     ]
 
     assert client.resolve(models, "qwen-image-2512")["file"] == "qwen_image_2512_q8p.ckpt"
     assert client.resolve(models, "ernie-image")["file"] == "ernie_image_q8p.ckpt"
+    assert client.resolve(models, "ernie-image-turbo")["file"] == "ernie_image_turbo_q8p.ckpt"
     assert client.resolve(loras, "qwen-lightning")["file"] == "qwen_image_2512_lightning_4_step_v1.0_lora_f16.ckpt"
+    assert client.resolve(loras, "qwen-turbo-lora")["file"] == "qwen_image_2512_turbo_4_step_v1.0_lora_f16.ckpt"
 
-    assert client.generation_defaults(models[0])["steps"] == 35
+    assert client.generation_defaults(models[0])["steps"] == 50
+    assert client.generation_defaults(models[0])["cfg"] == 4.0
     assert client.generation_defaults(models[1])["steps"] == 50
+    assert client.generation_defaults(models[1])["cfg"] == 4.0
+    assert client.generation_defaults(models[2])["steps"] == 8
+    assert client.generation_defaults(models[2])["cfg"] == 1.0
     assert client.generation_defaults(models[0], loras[0])["steps"] == 4
+    assert client.generation_defaults(models[0], loras[0])["cfg"] == 1.0
+    assert client.generation_defaults(models[0], loras[1])["steps"] == 4
+    assert client.generation_defaults(models[0], loras[1])["cfg"] == 1.0
     assert client.plugin_config()["default_model"] == "qwen-image-2512"
