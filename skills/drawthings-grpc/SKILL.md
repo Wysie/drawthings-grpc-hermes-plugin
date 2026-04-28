@@ -2,7 +2,7 @@
 name: drawthings-grpc
 description: Use local Draw Things gRPC image generation without changing the default image generation backend.
 tags: [draw-things, image-generation, grpc, local, apple-silicon]
-version: 0.2.0
+version: 0.3.0
 author: Agent Hammy
 ---
 
