@@ -89,6 +89,134 @@ export DRAWTHINGS_GRPC_TLS=true
 export DRAWTHINGS_GRPC_TLS_NAME=localhost
 ```
 
+## Setting Up gRPCServerCLI
+
+If you do not want to manually enable the Draw Things app gRPC server after every launch, run the standalone `gRPCServerCLI-macOS` binary as a macOS LaunchAgent.
+
+### 1. Download the prebuilt server
+
+```bash
+cd /tmp
+
+curl -L -o gRPCServerCLI-macOS \
+  https://github.com/drawthingsai/draw-things-community/releases/download/v1.20260418.1/gRPCServerCLI-macOS
+
+chmod +x gRPCServerCLI-macOS
+sudo mkdir -p /usr/local/bin
+sudo mv gRPCServerCLI-macOS /usr/local/bin/gRPCServerCLI-macOS
+sudo xattr -dr com.apple.quarantine /usr/local/bin/gRPCServerCLI-macOS
+```
+
+### 2. Find your Draw Things models directory
+
+Common macOS sandbox path:
+
+```text
+~/Library/Containers/com.liuliu.draw-things/Data/Documents/Models
+```
+
+If unsure, search for it:
+
+```bash
+find "$HOME/Library/Containers" "$HOME/Documents" "$HOME/Library/Application Support" \
+  -type d -name Models 2>/dev/null | grep -i "draw\\|liuliu"
+```
+
+### 3. Test the server manually
+
+Replace the models path if yours is different:
+
+```bash
+/usr/local/bin/gRPCServerCLI-macOS \
+  "$HOME/Library/Containers/com.liuliu.draw-things/Data/Documents/Models" \
+  --name "Draw Things gRPC Server" \
+  --address 0.0.0.0 \
+  --port 7859 \
+  --model-browser
+```
+
+Notes:
+
+- TLS is enabled by default. Do **not** pass `--no-tls` unless you also configure the plugin with `DRAWTHINGS_GRPC_TLS=false`.
+- `--address 0.0.0.0` allows other machines on your LAN to connect.
+- `--port 7859` matches the plugin default.
+- `--model-browser` enables model/LoRA metadata discovery through `Echo`.
+
+From another machine, verify with `grpcurl` and the Draw Things `imageService.proto`:
+
+```bash
+grpcurl -insecure \
+  -import-path /path/to/draw-things-comfyui/resources \
+  -proto imageService.proto \
+  -d '{"name":"test"}' \
+  drawthings.local:7859 \
+  ImageGenerationService/Echo
+```
+
+If you use an IP address instead of `drawthings.local`, replace the host accordingly.
+
+### 4. Create a LaunchAgent for auto-start
+
+```bash
+mkdir -p ~/Library/LaunchAgents ~/Library/Logs
+
+cat > ~/Library/LaunchAgents/io.example.drawthings-grpc.plist <<'PLIST'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+ "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>io.example.drawthings-grpc</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/local/bin/gRPCServerCLI-macOS</string>
+    <string>/Users/YOUR_USERNAME/Library/Containers/com.liuliu.draw-things/Data/Documents/Models</string>
+    <string>--name</string>
+    <string>Draw Things gRPC Server</string>
+    <string>--address</string>
+    <string>0.0.0.0</string>
+    <string>--port</string>
+    <string>7859</string>
+    <string>--model-browser</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>KeepAlive</key>
+  <true/>
+
+  <key>StandardOutPath</key>
+  <string>/Users/YOUR_USERNAME/Library/Logs/drawthings-grpc.out.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/Users/YOUR_USERNAME/Library/Logs/drawthings-grpc.err.log</string>
+</dict>
+</plist>
+PLIST
+```
+
+Edit the plist and replace `YOUR_USERNAME` with your macOS username. Then load it:
+
+```bash
+launchctl unload ~/Library/LaunchAgents/io.example.drawthings-grpc.plist 2>/dev/null || true
+launchctl load ~/Library/LaunchAgents/io.example.drawthings-grpc.plist
+launchctl start io.example.drawthings-grpc
+```
+
+Verify:
+
+```bash
+launchctl list | grep drawthings
+lsof -nP -iTCP:7859 -sTCP:LISTEN
+tail -50 ~/Library/Logs/drawthings-grpc.out.log
+tail -50 ~/Library/Logs/drawthings-grpc.err.log
+```
+
+Once `Echo` works, configure this plugin to point at that server using `DRAWTHINGS_GRPC_HOST`, `DRAWTHINGS_GRPC_PORT`, and `DRAWTHINGS_GRPC_TLS`.
+
 ## Example usage
 
 Generate with Qwen Image quality defaults (also the bundled default model if `model` is omitted):
