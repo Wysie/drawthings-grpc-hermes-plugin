@@ -1,5 +1,6 @@
 {
   "description": "Built-in defaults and aliases for Draw Things gRPC plugin. User overrides live in ~/.hermes/drawthings-grpc/config.json.",
+  "default_model": "qwen-image-2512",
   "version_defaults": {
     "z_image": {
       "steps": 8,

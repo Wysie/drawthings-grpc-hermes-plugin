@@ -91,7 +91,7 @@ export DRAWTHINGS_GRPC_TLS_NAME=localhost
 
 ## Example usage
 
-Generate with Qwen Image quality defaults:
+Generate with Qwen Image quality defaults (also the bundled default model if `model` is omitted):
 
 ```json
 {
@@ -146,8 +146,9 @@ Draw Things has many models. The plugin should not maintain a giant download cat
 1. `version_defaults`: defaults by Draw Things model family/version, e.g. `qwen_image`, `z_image`, `ernie_image`, `sdxl_base_v0.9`.
 2. `model_defaults`: overrides for known installed model files.
 3. `lora_defaults`: overrides for known LoRA files.
-4. user config overrides in `~/.hermes/drawthings-grpc/config.json`.
-5. explicit tool arguments always win.
+4. `default_model`: model alias/name/file used when the caller omits `model`.
+5. user config overrides in `~/.hermes/drawthings-grpc/config.json`.
+6. explicit tool arguments always win.
 
 Bundled defaults live in:
 
@@ -178,6 +179,7 @@ Then optionally add friendly aliases and defaults:
 
 ```json
 {
+  "default_model": "qwen-image-2512",
   "aliases": {
     "my-anime-model": "my_anime_model_q8p.ckpt",
     "my-style-lora": "my_style_lora_f16.ckpt"

@@ -37,3 +37,4 @@ def test_alias_resolution_and_defaults():
     assert client.generation_defaults(models[0])["steps"] == 35
     assert client.generation_defaults(models[1])["steps"] == 50
     assert client.generation_defaults(models[0], loras[0])["steps"] == 4
+    assert client.plugin_config()["default_model"] == "qwen-image-2512"
