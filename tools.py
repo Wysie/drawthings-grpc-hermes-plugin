@@ -36,5 +36,5 @@ def drawthings_generate(args=None, **kwargs) -> str:
 
 
 def _endpoint_info():
-    host, port, tls = client._endpoint()
-    return {"host": host, "port": port, "tls": tls}
+    host, port, tls, tls_name = client._endpoint()
+    return {"host": host, "port": port, "tls": tls, "tls_name": tls_name}

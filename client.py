@@ -91,20 +91,22 @@ def _as_bool(v: Any, default: bool = True) -> bool:
     return str(v).lower() not in {"0", "false", "no"}
 
 
-def _endpoint() -> tuple[str, int, bool]:
+def _endpoint() -> tuple[str, int, bool, str]:
     cfg = plugin_config().get("endpoint", {})
-    host = os.getenv("DRAWTHINGS_GRPC_HOST") or cfg.get("host") or plugin_config().get("host") or "localhost"
-    port = int(os.getenv("DRAWTHINGS_GRPC_PORT") or cfg.get("port") or plugin_config().get("port") or 7859)
-    tls = _as_bool(os.getenv("DRAWTHINGS_GRPC_TLS"), _as_bool(cfg.get("tls", plugin_config().get("tls", True))))
-    return str(host), port, tls
+    merged = plugin_config()
+    host = os.getenv("DRAWTHINGS_GRPC_HOST") or cfg.get("host") or merged.get("host") or "localhost"
+    port = int(os.getenv("DRAWTHINGS_GRPC_PORT") or cfg.get("port") or merged.get("port") or 7859)
+    tls = _as_bool(os.getenv("DRAWTHINGS_GRPC_TLS"), _as_bool(cfg.get("tls", merged.get("tls", True))))
+    tls_name = os.getenv("DRAWTHINGS_GRPC_TLS_NAME") or cfg.get("tls_name") or merged.get("tls_name") or "localhost"
+    return str(host), port, tls, str(tls_name)
 
 
 def _channel():
-    host, port, tls = _endpoint()
+    host, port, tls, tls_name = _endpoint()
     opts = [("grpc.max_send_message_length", -1), ("grpc.max_receive_message_length", -1)]
     if tls:
         # Draw Things cert CN is localhost even when accessed over LAN IP.
-        opts.append(("grpc.ssl_target_name_override", os.getenv("DRAWTHINGS_GRPC_TLS_NAME", "localhost")))
+        opts.append(("grpc.ssl_target_name_override", tls_name))
         return grpc.secure_channel(f"{host}:{port}", grpc.ssl_channel_credentials(_CERT), options=opts)
     return grpc.insecure_channel(f"{host}:{port}", options=opts)
 

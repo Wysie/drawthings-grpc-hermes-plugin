@@ -79,7 +79,8 @@ For a durable setup, put the endpoint in the plugin's user config:
   "endpoint": {
     "host": "drawthings.local",
     "port": 7859,
-    "tls": true
+    "tls": true,
+    "tls_name": "localhost"
   }
 }
 ```
@@ -90,7 +91,7 @@ User config path:
 ~/.hermes/drawthings-grpc/config.json
 ```
 
-This is preferred for Hermes gateway / WhatsApp / Telegram sessions because shell environment variables are not always inherited by long-running gateway tool processes.
+This is preferred for Hermes gateway / WhatsApp / Telegram sessions because shell environment variables are not always inherited by long-running gateway tool processes. `tls_name` is the hostname used for TLS certificate verification; keep it as `localhost` when connecting to Draw Things by LAN IP because Draw Things' generated certificate is usually issued for `localhost`.
 
 Environment variables are still supported as overrides, and are useful for one-off CLI runs, tests, or temporary endpoint switching:
 
@@ -242,7 +243,8 @@ Once `Echo` works, configure this plugin to point at that server using `~/.herme
   "endpoint": {
     "host": "drawthings.local",
     "port": 7859,
-    "tls": true
+    "tls": true,
+    "tls_name": "localhost"
   }
 }
 ```
