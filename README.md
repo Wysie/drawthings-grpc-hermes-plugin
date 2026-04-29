@@ -72,7 +72,27 @@ Defaults:
 - Port: `7859`
 - TLS: enabled
 
-Override with environment variables:
+For a durable setup, put the endpoint in the plugin's user config:
+
+```json
+{
+  "endpoint": {
+    "host": "drawthings.local",
+    "port": 7859,
+    "tls": true
+  }
+}
+```
+
+User config path:
+
+```text
+~/.hermes/drawthings-grpc/config.json
+```
+
+This is preferred for Hermes gateway / WhatsApp / Telegram sessions because shell environment variables are not always inherited by long-running gateway tool processes.
+
+Environment variables are still supported as overrides, and are useful for one-off CLI runs, tests, or temporary endpoint switching:
 
 - `DRAWTHINGS_GRPC_HOST`
 - `DRAWTHINGS_GRPC_PORT`
@@ -80,7 +100,7 @@ Override with environment variables:
 - `DRAWTHINGS_GRPC_TLS_NAME` (default `localhost`; useful because Draw Things cert CN is usually localhost)
 - `DRAWTHINGS_OUTPUT_DIR` (default `~/Pictures/Draw Things`)
 
-Example LAN server:
+Example temporary override:
 
 ```bash
 export DRAWTHINGS_GRPC_HOST=drawthings.local
@@ -215,7 +235,19 @@ tail -50 ~/Library/Logs/drawthings-grpc.out.log
 tail -50 ~/Library/Logs/drawthings-grpc.err.log
 ```
 
-Once `Echo` works, configure this plugin to point at that server using `DRAWTHINGS_GRPC_HOST`, `DRAWTHINGS_GRPC_PORT`, and `DRAWTHINGS_GRPC_TLS`.
+Once `Echo` works, configure this plugin to point at that server using `~/.hermes/drawthings-grpc/config.json`:
+
+```json
+{
+  "endpoint": {
+    "host": "drawthings.local",
+    "port": 7859,
+    "tls": true
+  }
+}
+```
+
+Use `DRAWTHINGS_GRPC_HOST`, `DRAWTHINGS_GRPC_PORT`, and `DRAWTHINGS_GRPC_TLS` only when you need a temporary override.
 
 ## Example usage
 
