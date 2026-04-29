@@ -256,6 +256,7 @@ def generation_defaults(model: dict[str, Any], lora: dict[str, Any] | None = Non
         "sampler": "Euler A Trailing",
         "cfg": 1.0,
         "shift": 1.0,
+        "shift_terminal": None,
         "guidance_embed": 3.5,
         "resolution_dependent_shift": True,
     }
@@ -322,6 +323,18 @@ def generate_image(args: dict[str, Any]) -> dict[str, Any]:
     cfg.batchSize = 1
     cfg.seedMode = SeedMode.ScaleAlike
     cfg.shift = float(args.get("shift", defaults.get("shift", 1.0)))
+    unsupported_settings: dict[str, Any] = {}
+    shift_terminal = args.get("shift_terminal", defaults.get("shift_terminal"))
+    if shift_terminal is not None:
+        # Newer/alternate Draw Things schemas may expose scheduler terminal shift.
+        # The current public gRPC FlatBuffer schema used by this plugin does not,
+        # so keep this best-effort and report when it cannot be applied.
+        if hasattr(cfg, "shiftTerminal"):
+            cfg.shiftTerminal = float(shift_terminal)
+        elif hasattr(cfg, "shift_terminal"):
+            cfg.shift_terminal = float(shift_terminal)
+        else:
+            unsupported_settings["shift_terminal"] = shift_terminal
     cfg.resolutionDependentShift = bool(args.get("resolution_dependent_shift", defaults.get("resolution_dependent_shift", True)))
     cfg.speedUpWithGuidanceEmbed = bool(args.get("speed_up", defaults.get("speed_up", True)))
     cfg.guidanceEmbed = float(args.get("guidance_embed", defaults.get("guidance_embed", 3.5)))
@@ -384,6 +397,7 @@ def generate_image(args: dict[str, Any]) -> dict[str, Any]:
         "defaults": defaults,
         "final_step": final_step,
         "sampler": args.get("sampler") or defaults.get("sampler") or "Euler A Trailing",
+        "unsupported_settings": unsupported_settings,
         "seed": seed,
         "bytes": out_path.stat().st_size,
     }

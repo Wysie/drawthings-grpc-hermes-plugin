@@ -103,6 +103,24 @@
       "sampler": "Euler A Trailing",
       "cfg": 1.0,
       "lora_weight": 1.0
+    },
+    "wuli_qwen_image_2512_turbo_lora_4steps_v3.0_bf16_lora_f16.ckpt": {
+      "steps": 4,
+      "sampler": "Euler A Trailing",
+      "cfg": 1.0,
+      "shift": 0.9162907318741551,
+      "shift_terminal": null,
+      "resolution_dependent_shift": true,
+      "lora_weight": 1.0
+    },
+    "wuli_qwen_image_2512_turbo_lora_2steps_v1.0_bf16_lora_f16.ckpt": {
+      "steps": 2,
+      "sampler": "Euler A Trailing",
+      "cfg": 1.0,
+      "shift": 0.9162907318741551,
+      "shift_terminal": 0.7155,
+      "resolution_dependent_shift": true,
+      "lora_weight": 1.0
     }
   },
   "aliases": {
@@ -125,6 +143,9 @@
     "qwen-image-lightning": "qwen_image_2512_lightning_4_step_v1.0_lora_f16.ckpt",
     "lightning-4step": "qwen_image_2512_lightning_4_step_v1.0_lora_f16.ckpt",
     "qwen-turbo-lora": "qwen_image_2512_turbo_4_step_v1.0_lora_f16.ckpt",
-    "turbo-4step": "qwen_image_2512_turbo_4_step_v1.0_lora_f16.ckpt"
+    "turbo-4step": "qwen_image_2512_turbo_4_step_v1.0_lora_f16.ckpt",
+    "qwen-turbo-v1": "qwen_image_2512_turbo_4_step_v1.0_lora_f16.ckpt",
+    "qwen-turbo-v3": "wuli_qwen_image_2512_turbo_lora_4steps_v3.0_bf16_lora_f16.ckpt",
+    "qwen-turbo-2step": "wuli_qwen_image_2512_turbo_lora_2steps_v1.0_bf16_lora_f16.ckpt"
   }
 }
