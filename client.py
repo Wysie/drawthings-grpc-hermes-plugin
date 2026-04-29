@@ -83,11 +83,20 @@ class Inventory:
     textual_inversions: list[dict[str, Any]]
 
 
+def _as_bool(v: Any, default: bool = True) -> bool:
+    if v is None:
+        return default
+    if isinstance(v, bool):
+        return v
+    return str(v).lower() not in {"0", "false", "no"}
+
+
 def _endpoint() -> tuple[str, int, bool]:
-    host = os.getenv("DRAWTHINGS_GRPC_HOST", "localhost")
-    port = int(os.getenv("DRAWTHINGS_GRPC_PORT", "7859"))
-    tls = os.getenv("DRAWTHINGS_GRPC_TLS", "true").lower() not in {"0", "false", "no"}
-    return host, port, tls
+    cfg = plugin_config().get("endpoint", {})
+    host = os.getenv("DRAWTHINGS_GRPC_HOST") or cfg.get("host") or plugin_config().get("host") or "localhost"
+    port = int(os.getenv("DRAWTHINGS_GRPC_PORT") or cfg.get("port") or plugin_config().get("port") or 7859)
+    tls = _as_bool(os.getenv("DRAWTHINGS_GRPC_TLS"), _as_bool(cfg.get("tls", plugin_config().get("tls", True))))
+    return str(host), port, tls
 
 
 def _channel():
