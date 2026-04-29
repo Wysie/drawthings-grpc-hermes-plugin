@@ -108,18 +108,18 @@
       "steps": 4,
       "sampler": "Euler A Trailing",
       "cfg": 1.0,
-      "shift": 0.9162907318741551,
+      "shift": 2.5,
       "shift_terminal": null,
-      "resolution_dependent_shift": true,
+      "resolution_dependent_shift": false,
       "lora_weight": 1.0
     },
     "wuli_qwen_image_2512_turbo_lora_2steps_v1.0_bf16_lora_f16.ckpt": {
       "steps": 2,
       "sampler": "Euler A Trailing",
       "cfg": 1.0,
-      "shift": 0.9162907318741551,
+      "shift": 2.5149384885764503,
       "shift_terminal": 0.7155,
-      "resolution_dependent_shift": true,
+      "resolution_dependent_shift": false,
       "lora_weight": 1.0
     }
   },

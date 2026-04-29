@@ -55,7 +55,7 @@ DRAWTINGS_GENERATE = {
             },
             "seed": {"type": "integer", "description": "Optional deterministic seed."},
             "cfg": {"type": "number", "default": 1.0, "description": "Guidance scale/CFG."},
-            "shift": {"type": "number", "description": "Flow scheduler shift / exponential_shift_mu when supported by the backend."},
+            "shift": {"type": "number", "description": "Flow scheduler shift multiplier for Draw Things. If a model card gives exponential_shift_mu, pass exp(mu), not mu."},
             "shift_terminal": {"type": "number", "description": "Optional terminal shift for schedulers that expose it; ignored/reported if the current Draw Things gRPC schema lacks this field."},
             "guidance_embed": {"type": "number", "description": "Guidance embed value for flow models when supported."},
             "resolution_dependent_shift": {"type": "boolean", "description": "Whether to enable resolution-dependent shift for flow models."},
