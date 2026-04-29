@@ -6,23 +6,21 @@
       "steps": 8,
       "sampler": "Euler A Trailing",
       "cfg": 1.0,
-      "shift": 1.0,
+      "shift": 3.0,
       "guidance_embed": 3.5,
-      "resolution_dependent_shift": true
+      "resolution_dependent_shift": false
     },
     "qwen_image": {
-      "steps": 50,
+      "steps": 30,
       "sampler": "Euler A Trailing",
       "cfg": 4.0,
-      "shift": 1.0,
-      "guidance_embed": 3.5,
-      "resolution_dependent_shift": true
+      "shift": 2.0,
+      "guidance_embed": 3.5
     },
     "ernie_image": {
-      "steps": 50,
+      "steps": 30,
       "sampler": "Euler A Trailing",
       "cfg": 4.0,
-      "shift": 1.0,
       "guidance_embed": 3.5,
       "resolution_dependent_shift": true
     },
@@ -54,22 +52,29 @@
   "model_defaults": {
     "z_image_turbo_1.0_q8p.ckpt": {
       "steps": 8,
-      "sampler": "Euler A Trailing"
+      "sampler": "Euler A Trailing",
+      "cfg": 1.0,
+      "shift": 3.0,
+      "resolution_dependent_shift": false
     },
     "qwen_image_2512_q8p.ckpt": {
-      "steps": 50,
+      "steps": 30,
       "sampler": "Euler A Trailing",
-      "cfg": 4.0
+      "cfg": 4.0,
+      "shift": 2.0
     },
     "ernie_image_q8p.ckpt": {
-      "steps": 50,
+      "steps": 30,
       "sampler": "Euler A Trailing",
-      "cfg": 4.0
+      "cfg": 4.0,
+      "resolution_dependent_shift": true
     },
     "ernie_image_turbo_q8p.ckpt": {
       "steps": 8,
       "sampler": "Euler A Trailing",
-      "cfg": 1.0
+      "cfg": 1.0,
+      "shift": 4.0,
+      "resolution_dependent_shift": false
     },
     "flux_1_schnell_q8p.ckpt": {
       "steps": 4,
@@ -96,7 +101,9 @@
       "steps": 4,
       "sampler": "Euler A Trailing",
       "cfg": 1.0,
-      "lora_weight": 1.0
+      "lora_weight": 1.0,
+      "shift": 3.0,
+      "resolution_dependent_shift": false
     },
     "qwen_image_2512_turbo_4_step_v1.0_lora_f16.ckpt": {
       "steps": 4,
