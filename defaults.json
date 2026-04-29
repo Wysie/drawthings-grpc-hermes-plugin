@@ -109,6 +109,9 @@
       "steps": 4,
       "sampler": "Euler A Trailing",
       "cfg": 1.0,
+      "shift": 2.5,
+      "shift_terminal": null,
+      "resolution_dependent_shift": false,
       "lora_weight": 1.0
     },
     "wuli_qwen_image_2512_turbo_lora_4steps_v3.0_bf16_lora_f16.ckpt": {
