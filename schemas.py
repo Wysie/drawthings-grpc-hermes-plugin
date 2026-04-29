@@ -43,7 +43,7 @@ DRAWTINGS_GENERATE = {
             },
             "lora": {
                 "type": "string",
-                "description": "Optional LoRA alias, display name, or exact file. Example: qwen-lightning.",
+                "description": "Optional LoRA alias, display name, or exact file. Example: qwen-lightning. Omit to use configured default_lora when set; pass 'none' to disable the default LoRA.",
             },
             "lora_weight": {"type": "number", "default": 1.0},
             "width": {"type": "integer", "default": 1024, "description": "Width in pixels, rounded down to multiples of 64."},

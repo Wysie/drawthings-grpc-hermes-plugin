@@ -308,9 +308,13 @@ def generate_image(args: dict[str, Any]) -> dict[str, Any]:
     if not prompt:
         raise ValueError("prompt is required")
     inv = inventory()
-    selected_model = args.get("model") or plugin_config().get("default_model") or "qwen-image-2512"
+    cfg = plugin_config()
+    selected_model = args.get("model") or cfg.get("default_model") or "qwen-image-2512"
     model = resolve(inv.models, selected_model, default_first=True)
-    lora = resolve(inv.loras, args.get("lora")) if args.get("lora") else None
+    selected_lora = args.get("lora") if "lora" in args else cfg.get("default_lora")
+    if isinstance(selected_lora, str) and selected_lora.strip().lower() in {"", "none", "null", "false", "off"}:
+        selected_lora = None
+    lora = resolve(inv.loras, selected_lora) if selected_lora else None
 
     width = _safe_dim(args.get("width", 1024))
     height = _safe_dim(args.get("height", 1024))

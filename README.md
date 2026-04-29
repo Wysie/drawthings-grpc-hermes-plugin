@@ -7,6 +7,7 @@ Local/private image generation through Draw Things' gRPC server. This plugin int
 - Lists Draw Things models, LoRAs, ControlNets/IP-Adapters, upscalers, and textual inversions via gRPC `Echo`.
 - Generates images via gRPC `GenerateImage`.
 - Resolves friendly aliases such as `qwen-image-2512`, `z-image-turbo`, `ernie-image`, `realvisxl`, and `qwen-lightning`.
+- Supports configurable default model and default LoRA selection.
 - Applies layered model defaults for steps, sampler, CFG, LoRA weight, and related settings.
 - Saves output images locally.
 
@@ -310,8 +311,9 @@ Draw Things has many models. The plugin should not maintain a giant download cat
 2. `model_defaults`: overrides for known installed model files.
 3. `lora_defaults`: overrides for known LoRA files.
 4. `default_model`: model alias/name/file used when the caller omits `model`.
-5. user config overrides in `~/.hermes/drawthings-grpc/config.json`.
-6. explicit tool arguments always win.
+5. `default_lora`: optional LoRA alias/name/file used when the caller omits `lora`; callers can pass `"lora": "none"` to disable it.
+6. user config overrides in `~/.hermes/drawthings-grpc/config.json`.
+7. explicit tool arguments always win.
 
 Bundled defaults live in:
 
@@ -344,6 +346,7 @@ Then optionally add friendly aliases and defaults:
 ```json
 {
   "default_model": "qwen-image-2512",
+  "default_lora": "qwen-turbo-v3",
   "aliases": {
     "my-anime-model": "my_anime_model_q8p.ckpt",
     "my-style-lora": "my_style_lora_f16.ckpt"
