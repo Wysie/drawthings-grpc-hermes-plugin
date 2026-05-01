@@ -327,15 +327,72 @@ User overrides live in:
 ~/.hermes/drawthings-grpc/config.json
 ```
 
+### Config option reference
+
+The bundled `defaults.json` and user config file use the same schema. User config is deep-merged over bundled defaults, so you can override just one alias or one field without copying the whole file.
+
+Top-level options:
+
+| Option | Type | Meaning |
+|---|---|---|
+| `description` | string | Human-readable note only. The plugin does not use it for behavior. |
+| `endpoint` | object | Durable Draw Things gRPC connection settings. Preferred over environment variables for gateway/WhatsApp/Telegram sessions. |
+| `host` | string | Legacy top-level endpoint host fallback. Usually prefer `endpoint.host`. |
+| `port` | number/string | Legacy top-level endpoint port fallback. Usually prefer `endpoint.port`. |
+| `tls` | boolean/string | Legacy top-level TLS fallback. Usually prefer `endpoint.tls`. |
+| `tls_name` | string | Legacy top-level TLS certificate hostname fallback. Usually prefer `endpoint.tls_name`. |
+| `default_model` | string | Model alias, display name, or exact file used when `drawthings_generate` omits `model`. |
+| `default_lora` | string | Optional LoRA alias, display name, or exact file used when `drawthings_generate` omits `lora`. Pass `"lora": "none"` in a tool call to disable it for that generation. |
+| `aliases` | object | Friendly names mapped to exact Draw Things model/LoRA filenames or display names. Alias keys are slugified, so `Qwen Turbo V3` and `qwen-turbo-v3` resolve the same way. |
+| `version_defaults` | object | Defaults keyed by Draw Things model `version`, e.g. `qwen_image`, `z_image`, `ernie_image`. Applied when the selected model has that version. |
+| `model_defaults` | object | Defaults keyed by exact model file, e.g. `ernie_image_turbo_q8p.ckpt`. Applied after `version_defaults`; use this when multiple model variants share the same version. |
+| `lora_defaults` | object | Defaults keyed by exact LoRA file. Applied after model defaults when that LoRA is selected. Useful for speed LoRAs that need lower steps/CFG. |
+
+`endpoint` fields:
+
+| Field | Meaning |
+|---|---|
+| `host` | Hostname or IP of the Draw Things gRPC server. Public default is `localhost`; LAN setups often use a `.local` hostname or private IP in user config. |
+| `port` | gRPC port. Draw Things and `gRPCServerCLI` commonly use `7859`. |
+| `tls` | Whether to use TLS. Draw Things gRPC uses TLS by default. Set `false` only if the server was started with `--no-tls`. |
+| `tls_name` | Hostname used for TLS certificate verification. Draw Things certificates are usually issued for `localhost`, so keep this as `localhost` when connecting by LAN IP. |
+
+Generation default fields inside `version_defaults`, `model_defaults`, and `lora_defaults`:
+
+| Field | Meaning |
+|---|---|
+| `steps` | Sampling step count. Higher is slower and may improve quality for base models; turbo/lightning LoRAs usually need fewer steps. |
+| `sampler` | Draw Things sampler name. Supported names include `Euler A Trailing`, `Euler A`, `DPM++ 2M Karras`, `DPM++ SDE Karras`, `DPM++ 2M Trailing`, `DPM++ SDE Trailing`, `DDIM`, `DDIM Trailing`, `UniPC`, `UniPC Trailing`, `LCM`, and `TCD`. Unknown names fall back to `Euler A Trailing`. |
+| `cfg` | Guidance scale / CFG. Higher values follow the prompt more strongly but can overcook images; turbo models often use `1.0`. |
+| `lora_weight` | LoRA strength. Only used when a LoRA is selected. `1.0` means full weight; lower values reduce the LoRA effect. |
+| `shift` | Flow scheduler shift value. Model-specific; keep the bundled default unless you know the recommended value. |
+| `shift_terminal` | Optional terminal shift for schedulers/schemas that support it. If the installed Draw Things FlatBuffer schema lacks this field, the plugin reports it under `unsupported_settings` instead of failing. |
+| `guidance_embed` | Guidance embedding value used by supported flow models. Defaults to `3.5` when not specified. |
+| `resolution_dependent_shift` | Whether Draw Things should adjust shift by image resolution. Useful for some flow models, disabled for several turbo defaults. |
+| `speed_up` | Controls Draw Things' `speedUpWithGuidanceEmbed` flag. Defaults to `true` if omitted. |
+
+Resolution, seed, prompt, negative prompt, and output path are tool-call arguments rather than config-file defaults. `width`/`height` are rounded down to multiples of 64 and clamped between 64 and 2048.
+
+Precedence for a generation is:
+
+1. Built-in fallback defaults in code.
+2. Bundled `defaults.json`.
+3. User config at `~/.hermes/drawthings-grpc/config.json`.
+4. Selected model `version_defaults`.
+5. Selected exact `model_defaults`.
+6. Selected exact `lora_defaults`.
+7. Explicit `drawthings_generate` tool arguments.
+
 Current bundled examples:
 
 - `z_image` / Z Image Turbo: 8 steps, Euler A Trailing, CFG 1.0
-- `qwen_image` / Qwen Image 2512: 50 steps, Euler A Trailing, CFG 4.0
-- `ernie_image_q8p.ckpt` / ERNIE Image Base: 50 steps, Euler A Trailing, CFG 4.0
+- `qwen_image` / Qwen Image 2512: 30 steps, Euler A Trailing, CFG 4.0
+- `ernie_image_q8p.ckpt` / ERNIE Image Base: 30 steps, Euler A Trailing, CFG 4.0
 - `ernie_image_turbo_q8p.ckpt` / ERNIE Image Turbo: 8 steps, Euler A Trailing, CFG 1.0
 - `flux1`: 4 steps, Euler A Trailing, CFG 1.0
 - `sdxl_base_v0.9`: 25 steps, DPM++ 2M Karras, CFG 7.0
-- Qwen Lightning/Turbo LoRAs: 4 steps, Euler A Trailing, CFG 1.0, LoRA weight 1.0
+- Qwen Lightning/Turbo 4-step LoRAs: 4 steps, Euler A Trailing, CFG 1.0, LoRA weight 1.0
+- Wuli Qwen Turbo 2-step LoRA: 2 steps, Euler A Trailing, CFG 1.0, LoRA weight 1.0
 
 ## Adding your own models or LoRAs
 

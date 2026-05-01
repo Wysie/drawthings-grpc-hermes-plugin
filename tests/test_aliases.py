@@ -16,7 +16,8 @@ def load_plugin_client():
     return module.client if hasattr(module, "client") else __import__("drawthings_grpc_plugin.client", fromlist=["*"])
 
 
-def test_alias_resolution_and_defaults():
+def test_alias_resolution_and_defaults(monkeypatch, tmp_path):
+    monkeypatch.setenv("HERMES_HOME", str(tmp_path / "hermes-home"))
     client = load_plugin_client()
     models = [
         {"name": "Qwen Image 2512", "file": "qwen_image_2512_q8p.ckpt", "version": "qwen_image"},
@@ -42,9 +43,9 @@ def test_alias_resolution_and_defaults():
     assert client.resolve(loras, "qwen-lightning")["file"] == "qwen_image_2512_lightning_4_step_v1.0_lora_f16.ckpt"
     assert client.resolve(loras, "qwen-turbo-lora")["file"] == "qwen_image_2512_turbo_4_step_v1.0_lora_f16.ckpt"
 
-    assert client.generation_defaults(models[0])["steps"] == 50
+    assert client.generation_defaults(models[0])["steps"] == 30
     assert client.generation_defaults(models[0])["cfg"] == 4.0
-    assert client.generation_defaults(models[1])["steps"] == 50
+    assert client.generation_defaults(models[1])["steps"] == 30
     assert client.generation_defaults(models[1])["cfg"] == 4.0
     assert client.generation_defaults(models[2])["steps"] == 8
     assert client.generation_defaults(models[2])["cfg"] == 1.0
